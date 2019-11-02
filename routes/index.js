@@ -21,7 +21,7 @@ router.get('/', (req, res) => {
 router.post('/upload', (req, res) => {
   upload(req, res, err => {
     fs.readFile(`./uploads/${req.file.originalname}`, (err, file) => {
-      if (err) return console.log('This is your error'.err);
+      if (err) return console.log('This is your error ', err);
 
       const worker = createWorker({
         logger: m => console.log(m)
@@ -35,7 +35,7 @@ router.post('/upload', (req, res) => {
 
         const { data } = await worker.getPDF('Tesseract OCR Result');
         fs.writeFileSync(
-          `${__dirname}/outputs/${req.file.originalname}.pdf`,
+          `./outputs/${req.file.originalname}.pdf`,
           Buffer.from(data)
         );
         await worker.terminate();
@@ -46,7 +46,7 @@ router.post('/upload', (req, res) => {
 });
 
 router.get('/download', (req, res) => {
-  const file = `${__dirname}/outputs/${req.query.filename}`;
+  const file = `./outputs/${req.query.filename}`;
   res.download(file);
 });
 
